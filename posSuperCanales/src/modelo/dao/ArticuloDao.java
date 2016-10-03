@@ -1,5 +1,6 @@
 package modelo.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -796,6 +797,17 @@ public class ArticuloDao {
 				if(myArticulo.getPreciosVenta().get(y).getPrecio().doubleValue()>0){
 					//se completa el codigo de articulo para el precios
 					myArticulo.getPreciosVenta().get(y).setCodigoArticulo(idArticuloRegistrado);
+					
+					this.preciosDao.registrar(myArticulo.getPreciosVenta().get(y));
+					
+					//se establece el precio de venta por defecto
+					if(myArticulo.getPreciosVenta().get(y).getCodigoPrecio()==1){
+						myArticulo.setPrecioVenta(myArticulo.getPreciosVenta().get(y).getPrecio().doubleValue());
+					}
+				}else{//si dejo en blaco el precio siempre se guarda pero con precio 0
+					myArticulo.getPreciosVenta().get(y).setCodigoArticulo(idArticuloRegistrado);
+					
+					myArticulo.getPreciosVenta().get(y).setPrecio(new BigDecimal(0));
 					this.preciosDao.registrar(myArticulo.getPreciosVenta().get(y));
 					
 					//se establece el precio de venta por defecto

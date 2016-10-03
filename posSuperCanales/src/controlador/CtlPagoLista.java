@@ -63,7 +63,7 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTablaPagos().getSelectedRow();
         
         //si seleccion una fila
@@ -87,7 +87,7 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
         		try {
     				
     				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul_Reimpresion.jasper",myFactura.getIdFactura() );
-        			AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 5, myRecibo.getNoRecibo());
+        			AbstractJasperReports.createReportReciboCobroCaja(conexion.getPoolConexion().getConnection(), myRecibo.getNoRecibo());
         			AbstractJasperReports.showViewer(this.view);
     				//AbstractJasperReports.imprimierFactura();
     				this.view.getBtnImprimir().setEnabled(false);
@@ -214,12 +214,12 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 			//se verifica si la factura ya esta agregada al kardex
 			if (myFactura.getAgregadoAkardex()==0){
 				
-					int resul=JOptionPane.showConfirmDialog(view, "¿Desea anular la factura no "+myFactura.getIdFactura()+"?");
+					int resul=JOptionPane.showConfirmDialog(view, "ï¿½Desea anular la factura no "+myFactura.getIdFactura()+"?");
 					//sin confirmo la anulacion
 					if(resul==0){
 						JPasswordField pf = new JPasswordField();
-						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseña admin",JOptionPane.OK_CANCEL_OPTION);
-						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseña admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseï¿½a admin",JOptionPane.OK_CANCEL_OPTION);
+						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseï¿½a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
 						if(action < 0){
 							
 							

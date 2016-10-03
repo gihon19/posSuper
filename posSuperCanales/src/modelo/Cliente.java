@@ -15,7 +15,7 @@ public class Cliente {
 	
 	
 	public void setLimiteCredito(BigDecimal t){
-		limiteCredito=limiteCredito.add(t);
+		limiteCredito=new BigDecimal(t.setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
 	}
 	public BigDecimal getLimiteCredito(){
 		return limiteCredito;

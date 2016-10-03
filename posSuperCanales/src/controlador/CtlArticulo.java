@@ -120,7 +120,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 				CodBarra cod= this.view.getModeloCodBarra().getCodBarra(indexCodigoSelecionado);
 				
 				//se pregunta si en verdad se quiere borrar el codigo de bgarra
-				int confirmacion=JOptionPane.showConfirmDialog(view, "¿Desea eliminar el codigo de barra "+cod+" ?");
+				int confirmacion=JOptionPane.showConfirmDialog(view, "ï¿½Desea eliminar el codigo de barra "+cod+" ?");
 				
 				// si se confirma la eliminacion se procede a eliminar
 				if(confirmacion==0){
@@ -168,7 +168,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		//se ejecuta la accion de guardar
 		if(myArticuloDao.registrarArticulo(myArticulo)){
 			
-			JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
 			myArticulo.setId(myArticuloDao.getIdArticuloRegistrado());//se completa el proveedor guardado con el ID asignado por la BD
 			resultaOperacion=true;
 			this.view.setVisible(false);
@@ -282,26 +282,26 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		this.view.getCbxImpuesto().setSelectedIndex(1);
 	}
 	
-	 // maneja el evento de oprimir el botón del ratón
+	 // maneja el evento de oprimir el botï¿½n del ratï¿½n
 	public void mousePressed( MouseEvent evento )
 	{
 		check(evento);
 		checkForTriggerEvent( evento ); // comprueba el desencadenador
-	} // fin del método mousePressed
+	} // fin del mï¿½todo mousePressed
 	
-	// maneja el evento de liberación del botón del ratón
+	// maneja el evento de liberaciï¿½n del botï¿½n del ratï¿½n
 	public void mouseReleased( MouseEvent evento )
 	{
 		check(evento);
 		checkForTriggerEvent( evento ); // comprueba el desencadenador
-	} // fin del método mouseReleased
+	} // fin del mï¿½todo mouseReleased
 	
-	// determina si el evento debe desencadenar el menú contextual
+	// determina si el evento debe desencadenar el menï¿½ contextual
 	private void checkForTriggerEvent( MouseEvent evento )
 	{
 		if ( evento.isPopupTrigger() )
 			this.view.getMenuContextual().show(evento.getComponent(), evento.getX(), evento.getY() );
-	} // fin del método checkForTriggerEvent
+	} // fin del mï¿½todo checkForTriggerEvent
 	
 	public void check(MouseEvent e)
 	{ 

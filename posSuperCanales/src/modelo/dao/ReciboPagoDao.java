@@ -1,5 +1,6 @@
 package modelo.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import modelo.CierreCaja;
 import modelo.Cliente;
 import modelo.Conexion;
 import modelo.Factura;
@@ -43,13 +45,28 @@ public class ReciboPagoDao {
 		{
 			con = conexion.getPoolConexion().getConnection();
 			
-			insertar=con.prepareStatement( "INSERT INTO recibo_pago(fecha,codigo_cliente,total_letras,total,concepto,usuario) VALUES (now(),?,?,?,?,?)");
+			ClienteDao clienteDao= new ClienteDao(conexion);
+			myRecibo.setCliente(clienteDao.buscarCliente(myRecibo.getCliente().getId()));
+			
+			//se establece los saldo en 0
+			myRecibo.setSaldos0();
+			
+			//el salado anterio
+			myRecibo.setSaldoAnterior(clienteDao.getSaldoCliente(myRecibo.getCliente().getId()));
+			
+			//el saldo actural
+			myRecibo.setSaldo(myRecibo.getSaldoAnterior().subtract(myRecibo.getTotal()));
+			
+			//insertar=con.prepareStatement( "INSERT INTO recibo_pago(fecha,codigo_cliente,total_letras,total,concepto,usuario) VALUES (now(),?,?,?,?,?)");
+			insertar=con.prepareStatement( "INSERT INTO recibo_pago(fecha,codigo_cliente,total_letras,total,concepto,usuario,saldo_anterio,saldo) VALUES (now(),?,?,?,?,?,?,?)");
 			
 			insertar.setInt(1, myRecibo.getCliente().getId());
 			insertar.setString(2, myRecibo.getTotalLetras());
 			insertar.setBigDecimal(3, myRecibo.getTotal());
 			insertar.setString(4, myRecibo.getConcepto());
 			insertar.setString(5, conexion.getUsuarioLogin().getUser());
+			insertar.setBigDecimal(6, myRecibo.getSaldoAnterior().setScale(2, BigDecimal.ROUND_HALF_EVEN));
+			insertar.setBigDecimal(7, myRecibo.getSaldo().setScale(2, BigDecimal.ROUND_HALF_EVEN));
 						
 			resultado=insertar.executeUpdate();
 			
@@ -355,5 +372,140 @@ public class ReciboPagoDao {
 			}
 			else return null;
 		}
+	
+	public void calcularTotalCierre(CierreCaja unaCierre) {
+		// TODO Auto-generated method stub
+
+		// TODO Auto-generated method stub
+		
+		
+		Connection con = null;
+		ResultSet res=null;
+		
+		//se consiguie el ultima salida que realizo el usuario
+		ReciboPago ultimo=this.getCobroUltimoUser();
+		//se establece la ultima salida del usuaurio
+		unaCierre.setNoCobroFinal(ultimo.getNoRecibo());
+		
+		
+		
+		
+		
+		String sql="SELECT	ifnull(sum(recibo_pago.total), 0)AS cantidad FROM recibo_pago WHERE recibo_pago.no_recibo >= ? AND recibo_pago.no_recibo <= ?  AND recibo_pago.usuario =?";
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			insertar = con.prepareStatement(sql);
+			
+			insertar.setInt(1, unaCierre.getNoCobroInicial());
+			insertar.setInt(2, unaCierre.getNoCobroFinal());
+			insertar.setString(3, unaCierre.getUsuario());
+			
+			
+			//seleccionarCierre.setString(1, conexion.getUsuarioLogin().getUser());
+			res = insertar.executeQuery();
+			while(res.next()){
+				
+				
+				
+				//si existe alguna salida se suma y se establecen en el cierre
+				unaCierre.setTotalCobro(res.getBigDecimal("cantidad"));
+	
+			
+			 }
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(insertar != null)insertar.close();
+                if(con != null) con.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+	
+		
+	
+		
+	}
+
+	private ReciboPago getCobroUltimoUser() {
+		
+		//se crear un referencia al pool de conexiones
+		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+		
+		
+        Connection con = null;
+        
+    	//String sql="select * from cierre where usuario = ?";
+    	
+    	String sql2="SELECT * FROM recibo_pago WHERE usuario=? ORDER BY no_recibo DESC LIMIT 1";
+        //Statement stmt = null;
+    	ReciboPago unRecibo=new ReciboPago();
+		
+		ResultSet res=null;
+		
+		boolean existe=false;
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			insertar = con.prepareStatement(sql2);
+			
+			insertar.setString(1, conexion.getUsuarioLogin().getUser());
+			res = insertar.executeQuery();
+			while(res.next()){
+				
+				existe=true;
+				
+				unRecibo.setFecha(res.getString("fecha"));
+				unRecibo.setConcepto(res.getString("concepto"));
+				unRecibo.setNoRecibo(res.getInt("no_recibo"));
+				unRecibo.setTotal(res.getBigDecimal("total"));
+				unRecibo.setSaldoAnterior(res.getBigDecimal("saldo_anterio"));
+				unRecibo.setSaldo(res.getBigDecimal("saldo"));
+				
+				Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				
+				unRecibo.setCliente(unCliente);
+			
+			 }
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(insertar != null)insertar.close();
+                if(con != null) con.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+		return unRecibo;
+			/*if (existe) {
+				return unaCierre;
+			}
+			else return null;*/
+		
+	}
 
 }

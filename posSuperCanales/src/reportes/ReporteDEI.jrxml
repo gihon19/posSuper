@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-03-21T16:07:59 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteDei" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value="Y2xpbmljYS52X2NpZXJyZV9jYWphIEFTICw4Nyw2NyxiYWZiN2E1Yi1jZWEzLTRlNTMtOGJiOS1i&#xA;NzhiNzk3ODJlODI7"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="clinica data source"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
@@ -111,21 +112,21 @@ YEAR (fecha) =$P{Anio}]]>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[La Masica, Atlantida, Bo El Centro,Carretera Tela a Ceiba.]]></text>
+				<text><![CDATA[San Juan Pueblo, La Masica, Atlantida, Bo El Centro,Carretera Tela a Ceiba.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="3" width="570" height="23" uuid="3c2bd69a-9200-41f6-af53-6a56715225f5"/>
 				<textElement textAlignment="Center">
 					<font size="13"/>
 				</textElement>
-				<text><![CDATA[MISCELANEAS W&C S DE R.L]]></text>
+				<text><![CDATA[Supermercado Canales]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="32" width="572" height="14" uuid="a1709503-4ace-42cf-9af1-2a4b0fbe7a50"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Telefono (504) 2436-3194   RTN:01059015783604]]></text>
+				<text><![CDATA[Telefono (504) 33821370   RTN: 01071983020630]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="2" y="67" width="569" height="13" uuid="9728e7a6-4f41-4354-a5e8-0e638e21fa3d"/>
@@ -435,7 +436,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{t_exectos_2}]]></textFieldExpression>
 			</textField>
@@ -449,7 +450,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{isv15_1}]]></textFieldExpression>
 			</textField>
@@ -462,8 +463,8 @@ YEAR (fecha) =$P{Anio}]]>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right">
-					<font size="10" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{total_isv15_2}]]></textFieldExpression>
 			</textField>
@@ -476,8 +477,8 @@ YEAR (fecha) =$P{Anio}]]>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right">
-					<font size="10" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{isv18_1}]]></textFieldExpression>
 			</textField>
@@ -490,8 +491,8 @@ YEAR (fecha) =$P{Anio}]]>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right">
-					<font size="10" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{total_isv18_1}]]></textFieldExpression>
 			</textField>
@@ -504,8 +505,8 @@ YEAR (fecha) =$P{Anio}]]>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right">
-					<font size="10" isBold="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{total_venta_dia_1}]]></textFieldExpression>
 			</textField>

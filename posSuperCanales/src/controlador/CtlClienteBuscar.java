@@ -77,7 +77,7 @@ public boolean buscarCliente(Window v){
 					this.view.getModelo().limpiarClientes();
 					this.view.getModelo().agregarCliente(myCliente);
 				}else{
-					JOptionPane.showMessageDialog(view, "No se encuentro el articulo");
+					JOptionPane.showMessageDialog(view, "No se encuentro el cliente");
 				}
 			} 
 			

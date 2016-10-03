@@ -32,8 +32,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
+import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
+import net.sf.jasperreports.engine.export.JRTextExporter;
+import net.sf.jasperreports.engine.export.JRTextExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -65,6 +69,8 @@ public abstract class AbstractJasperReports
 	private static InputStream Devolucion=null;
 	private static InputStream inventario=null;
 	private static InputStream cierresCaja;
+	private static InputStream salidaCaja=null;
+	private static InputStream cobroCaja=null;
 	
 	private static JasperReport	reportFactura;
 	//private static JasperReport	reportFacturaCredito;
@@ -80,17 +86,26 @@ public abstract class AbstractJasperReports
 	private static JasperReport	reportKardex;
 	private static JasperReport	reportInventario;
 	private static JasperReport reportCierresCaja;
+	private static JasperReport	reportSalidaCaja;
+	private static JasperReport	reportCobroCaja;
+	private static Object strOutputFileName;
 	
 	
 	
 	public static void loadFileReport(){
 		
-		factura=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_wendy1.jasper");
-		factura2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_wendy2.jasper");
-		//facturaCredito=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_credito_wendy1.jasper");
-		//facturaCredito2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_credito_wendy2.jasper");
+		factura=AbstractJasperReports.class.getResourceAsStream("/reportes/facturaESPSON.jasper");//factura_carta.jasper
+		factura2=AbstractJasperReports.class.getResourceAsStream("/reportes/facturaESPSON.jasper");
+		
+		//factura=AbstractJasperReports.class.getResourceAsStream("/reportes/factura1.jasper");
+		//factura2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura1.jasper");
+		
+		//factura=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_carta2.jasper");
+		//factura2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_carta2.jasper");
+		
+		
 		facturaCompra=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_compra.jasper");
-		facturaReimpresion=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_reimpresion_wen1.jasper");
+		facturaReimpresion=AbstractJasperReports.class.getResourceAsStream("/reportes/facturaESPSON_copia.jasper");
 		cierreCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/cierre_caja.jasper");
 		reciboPago=AbstractJasperReports.class.getResourceAsStream("/reportes/recibo_pago.jasper");
 		Dei=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteDEI.jasper");
@@ -99,6 +114,8 @@ public abstract class AbstractJasperReports
 		kardex=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteKardex.jasper");
 		inventario=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteExistencia.jasper");
 		cierresCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/cierres_caja.jasper");
+		salidaCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/salida_caja.jasper");
+		cobroCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/cobro_caja.jasper");
 		
 		try {
 			reportFactura = (JasperReport) JRLoader.loadObject( factura );
@@ -115,11 +132,34 @@ public abstract class AbstractJasperReports
 			reportKardex= (JasperReport) JRLoader.loadObject( kardex );
 			reportInventario= (JasperReport) JRLoader.loadObject( inventario );
 			reportCierresCaja= (JasperReport) JRLoader.loadObject( cierresCaja );
+			reportSalidaCaja= (JasperReport) JRLoader.loadObject( salidaCaja );
+			reportCobroCaja= (JasperReport) JRLoader.loadObject( cobroCaja );
 			//Dei=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteDEI.jasper");
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	
+	public static void createReportReciboCobroCaja(Connection conn,int id){
+		 Map parametros = new HashMap();
+		 parametros.put("no_recibo",id);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportCobroCaja, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
 	}
 	
 	public static void createReportCodBarra(Connection conn,int id){
@@ -182,6 +222,26 @@ public abstract class AbstractJasperReports
 			}
 	}
 	
+	public static void createReportSalidaCaja(Connection conn,int codigo){
+		 Map parametros = new HashMap();
+		 parametros.put("codigo_salida",codigo);
+		 
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportSalidaCaja, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	
 	
 	public static void createReport( Connection conn, int tipoReporte,Integer idFactura )
 	{
@@ -200,6 +260,11 @@ public abstract class AbstractJasperReports
 				reportFilled = JasperFillManager.fillReport( reportFacturaReimpresion, parametros, conn );
 			}
 			if(tipoReporte==4){
+				
+				//se le pasa la direccion del sub informe de las salidas de caja
+				InputStream subInputStream = AbstractJasperReports.class.getClass().getResourceAsStream("/reportes/cierre_salida.jasper");
+				parametros.put("SUBREPORT_INPUT_STREAM", subInputStream);
+				
 				reportFilled = JasperFillManager.fillReport( reportFacturaCierreCaja, parametros, conn );
 			}
 			if(tipoReporte==5){
@@ -323,7 +388,11 @@ public abstract class AbstractJasperReports
 	}
 	public static void imprimierFactura(){
 		try {
+			
+			
 			JasperPrintManager.printReport(reportFilled, false);
+			
+			
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -333,7 +402,7 @@ public abstract class AbstractJasperReports
 	public static void showViewer(Window view)
 	{
 		JDialog viewer2 = new JDialog(view,"Vista previa del reporte", Dialog.ModalityType.DOCUMENT_MODAL);
-		viewer2.setSize(1000,800);
+		viewer2.setSize(1100,800);
 		viewer2.setLocationRelativeTo(null);
 		
 		
@@ -411,6 +480,46 @@ public abstract class AbstractJasperReports
 	{
 		try { 
 			JasperExportManager.exportReportToPdfFile( reportFilled, destination );
+		}
+		catch( JRException ex ) {
+			ex.printStackTrace();
+		}
+	}
+	public static void exportToTXT( )
+	{
+		/*
+		JRCsvExporter exporter = new JRCsvExporter();
+		exporter.setParameter(JRCsvExporterParameter.FIELD_DELIMITER, ";");
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
+		exporter.exportReport();
+		output = baos.toByteArray();
+		response.setContentType("text/plain");
+		response.setContentLength(output.length);
+		ServletOutputStream ouputStream = response.getOutputStream();
+		ouputStream.write(output);
+		ouputStream.flush();
+		ouputStream.close();*/
+		
+		
+		
+		try { 
+			JRTextExporter exporterTxt = new JRTextExporter();
+			
+			exporterTxt.setParameter(JRExporterParameter.JASPER_PRINT, reportFilled);
+
+			//exporterTxt.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, strOutputFileName );
+
+			exporterTxt.setParameter(JRTextExporterParameter.CHARACTER_WIDTH, new Integer(4));
+
+			exporterTxt.setParameter(JRTextExporterParameter.CHARACTER_HEIGHT, new Integer(12));
+
+			exporterTxt.setParameter(JRTextExporterParameter.BETWEEN_PAGES_TEXT, " ");
+
+			exporterTxt.exportReport();
+			JasperPrintManager.printReport(exporterTxt.getCurrentJasperPrint(), false);
+			//JasperExportManager.exportReportToPdfFile( reportFilled, destination );
 		}
 		catch( JRException ex ) {
 			ex.printStackTrace();

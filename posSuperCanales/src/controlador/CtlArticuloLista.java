@@ -246,7 +246,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 	        }//fin del if del doble click
         	else{//si solo seleccion la fila se guarda el id de proveedor para accion de eliminar
         		
-        		this.view.getBtnEliminar().setEnabled(true);
+        		//this.view.getBtnEliminar().setEnabled(true);
         		this.view.getBtnLimpiar().setEnabled(true);
         		/*idProveedor=identificador;
         		filaTabla=filaPulsada;*/

@@ -57,7 +57,7 @@ public class Conexion {
    private  DataSource poolConexiones=null;
    //private static DataSource poolConexionRemote=null;
    
-   private boolean nivelFac=false;
+   private boolean nivelFac=true;
    
    
    public void setNivelFac(boolean n){
@@ -163,16 +163,17 @@ public class Conexion {
     	   
     	   //miscelaneaswyc.com
     	   
-    	  /* ds.setDriverClassName(driver);
-           ds.setUrl("jdbc:mysql://localhost:3306/miswendy_admin_tools");
+    	 /* ds.setDriverClassName(driver);
+           ds.setUrl("jdbc:mysql://localhost:3306/admin_tools_test");
            ds.setUsername("root");
-           ds.setPassword("jdmm123");*/
+           ds.setPassword("jdmm123.");*/
            
            ds.setDriverClassName(driver);
-           ds.setUrl("jdbc:mysql://108.167.189.55:3306/miswendy_admin_tools?autoReconnect=true");
-           ds.setUsername("miswendy_pos");
-           ds.setPassword("bTp.rxN-*~Z4");
-          // ds.setMinIdle(20);
+          ds.setUrl("jdbc:mysql://192.168.0.102:3306/test");
+           //ds.setUrl("jdbc:mysql://localhost:3306/admin_tools_super");
+           ds.setUsername("user_admin_tools");
+           ds.setPassword("jdmm123.");
+          // ds.setMinIdle(20);*/
            ds.setMaxActive(3);
            ds.setMaxIdle(8);
            
@@ -200,7 +201,7 @@ public class Conexion {
 	       // validationQuery = "select 1"
 	        		
            
-          /* ds.setMinIdle(3);
+          ds.setMinIdle(3);
            ds.setInitialSize(3);
            
            ds.setMaxWait(600000);
@@ -210,7 +211,7 @@ public class Conexion {
            ds.setTestOnBorrow(true);
     
   
-           ds.setValidationQuery("SELECT 1");*/
+           ds.setValidationQuery("SELECT 1");
            
            //ds.ser
            

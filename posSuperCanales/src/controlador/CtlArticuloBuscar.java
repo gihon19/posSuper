@@ -34,6 +34,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 	
 	//pool de conexion
 	private Conexion conexion=null;
+	private boolean resultado=false;
 	
 	public CtlArticuloBuscar(ViewListaArticulo view, Conexion conn){
 		
@@ -41,7 +42,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 		this.view=view;
 		myArticulo=new Articulo();
 		myArticuloDao=new ArticuloDao(conexion);
-		cargarTabla(myArticuloDao.todoArticulos());
+		//cargarTabla(myArticuloDao.todoArticulos());
 		
 		view.getRdbtnArticulo().setSelected(true);
 		
@@ -50,9 +51,12 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 	
 	public void cargarTabla(List<Articulo> articulos){
 		//JOptionPane.showMessageDialog(view, articulos);
-		this.view.getModelo().limpiarArticulos();
-		for(int c=0;c<articulos.size();c++){
-			this.view.getModelo().agregarArticulo(articulos.get(c));
+		
+		if(articulos!=null){
+			this.view.getModelo().limpiarArticulos();
+			for(int c=0;c<articulos.size();c++){
+				this.view.getModelo().agregarArticulo(articulos.get(c));
+			}
 		}
 	}
 
@@ -104,14 +108,14 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTablaArticulos().getSelectedRow();
         //JOptionPane.showMessageDialog(view, filaPulsada);
 		if (e.getClickCount() == 2){
 			
 			myArticulo=this.view.getModelo().getArticulo(filaPulsada);
 			
-			
+			resultado=true;
 			//myArticuloDao.desconectarBD();
 			this.view.setVisible(false);
 			//JOptionPane.showMessageDialog(null,myMarca);
@@ -158,7 +162,8 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 					//si se seleciono el boton ID
 					if(this.view.getRdbtnId().isSelected()){  
 						myArticulo=myArticuloDao.buscarArticulo(Integer.parseInt(this.view.getTxtBuscar().getText()));
-						if(myArticulo!=null){												
+						if(myArticulo!=null){
+							resultado=true;
 							this.view.getModelo().limpiarArticulos();
 							this.view.getModelo().agregarArticulo(myArticulo);
 							view.setVisible(false);
@@ -172,6 +177,9 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 						
 						//cargarTabla(myArticuloDao.buscarArticulo(this.view.getTxtBuscar().getText()));
 						//JOptionPane.showMessageDialog(view, myArticulo);
+						if(this.filaPulsada>=0 && myArticulo!=null){
+							resultado=true;
+						}
 				        view.setVisible(false);
 						}
 					if(this.view.getRdbtnMarca().isSelected()){  
@@ -194,11 +202,14 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 						
 					}
 	}
+	public Articulo getArticulo(){
+		return myArticulo;
+	}
 	//public void buscarArticulo()
-	public Articulo buscarArticulo(Window v){
+	public boolean buscarArticulo(Window v){
 		
 		//this.myArticuloDao.cargarInstrucciones();
-		cargarTabla(myArticuloDao.todoArticulos());
+		//cargarTabla(myArticuloDao.todoArticulos());
 		myArticulo=null;
 		this.view.getBtnEliminar().setEnabled(false);
 		this.view.getBtnAgregar().setEnabled(false);
@@ -209,7 +220,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 		//view.setFocusable(true);
 		this.view.setVisible(true);
 		//
-		return this.myArticulo;
+		return resultado;
 	}
 
 	@Override
@@ -221,6 +232,37 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getComponent()==this.view.getTxtBuscar()&&view.getTxtBuscar().getText().trim().length()!=0){
+			
+			//si esta activado la busqueda por articulo
+			if(this.view.getRdbtnArticulo().isSelected()){
+				
+				this.filaPulsada=this.view.getTablaArticulos().getSelectedRow();
+				
+				if(e.getKeyCode()==KeyEvent.VK_DOWN){
+					filaPulsada++;
+					this.view.getTablaArticulos().setRowSelectionInterval(0	,filaPulsada);
+					
+					myArticulo=myArticulo=view.getModelo().getArticulo(filaPulsada);
+					
+					
+				}else
+					if(e.getKeyCode()==KeyEvent.VK_UP){
+						
+						filaPulsada--;
+						this.view.getTablaArticulos().setRowSelectionInterval(0	, filaPulsada);
+						myArticulo=myArticulo=view.getModelo().getArticulo(filaPulsada);
+					}
+				
+				
+				
+				//this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+				
+				//myArticulo=view.getModelo().getArticulo(0);
+			}
+		
+		
+		}
 		
 	}
 
@@ -231,6 +273,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 		//filaPulsada = this.view.getTablaArticulos().getSelectedRow();
 		//JOptionPane.showConfirmDialog(view, filaPulsada);
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			resultado=false;
 			this.myArticulo=null;
 	         view.setVisible(false);
 	      }
@@ -243,13 +286,14 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 	            
 	            //se consigue el proveedore de la fila seleccionada
 	            myArticulo=this.view.getModelo().getArticulo(filaPulsada);// .getCliente(filaPulsada);
+	            this.resultado=true;
 	            
 				//myArticulo=view.getModelo().getArticulo(filaPulsada-1);
 				view.setVisible(false);
 			}
 		}
 		
-		if(e.getComponent()==this.view.getTxtBuscar()&&view.getTxtBuscar().getText().trim().length()!=0){
+		if(e.getComponent()==this.view.getTxtBuscar()&&view.getTxtBuscar().getText().trim().length()>=2&&e.getKeyCode()!=KeyEvent.VK_UP&&e.getKeyCode()!=KeyEvent.VK_DOWN){
 			
 			//si esta activado la busqueda por articulo
 			if(this.view.getRdbtnArticulo().isSelected()){
@@ -257,6 +301,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 				cargarTabla(myArticuloDao.buscarArticulo(this.view.getTxtBuscar().getText()));
 				
 				this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+				filaPulsada=1;
 				
 				myArticulo=view.getModelo().getArticulo(0);
 			}
@@ -265,6 +310,8 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 			if(this.view.getRdbtnMarca().isSelected()){  
 				cargarTabla(myArticuloDao.buscarArticuloMarca(this.view.getTxtBuscar().getText()));
 				this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+				filaPulsada=1;
+				
 				
 				myArticulo=view.getModelo().getArticulo(0);
 			}
@@ -276,6 +323,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 					this.view.getModelo().limpiarArticulos();
 					this.view.getModelo().agregarArticulo(myArticulo);
 					this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+					filaPulsada=1;
 					
 					myArticulo=view.getModelo().getArticulo(0);
 				}else{

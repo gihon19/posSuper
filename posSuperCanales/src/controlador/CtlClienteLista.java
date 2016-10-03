@@ -14,6 +14,7 @@ import modelo.Cliente;
 import modelo.dao.ClienteDao;
 import modelo.dao.CodBarraDao;
 import modelo.Conexion;
+import view.tablemodel.TablaModeloCliente;
 import view.tablemodel.TablaModeloMarca;
 import view.ViewCrearArticulo;
 import view.ViewCrearCliente;
@@ -84,7 +85,7 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 				this.view.getTablaClientes().scrollRectToVisible(rect);
 				this.view.getTablaClientes().clearSelection();
 				this.view.getTablaClientes().setRowSelectionInterval(row, row);
-				TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTablaClientes().getModel();
+				TablaModeloCliente modelo = (TablaModeloCliente)this.view.getTablaClientes().getModel();
 				modelo.fireTableDataChanged();
 			}
 			view=null;
@@ -104,7 +105,7 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTablaClientes().getSelectedRow();
         
         //si seleccion una fila

@@ -106,7 +106,7 @@ public class CtlRequisicion implements ActionListener, MouseListener, TableModel
 			view.getTxtPrecio().setText("");
 		}
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
 		filaPulsada = this.view.getTablaArticulos().getSelectedRow();
 		char caracter = e.getKeyChar();
 		
@@ -473,12 +473,12 @@ public void calcularTotales(){
 		//ctlArticulo.view.getTxtBuscar().selectAll();
 		view.getTxtBuscar().requestFocusInWindow();
 		viewListaArticulo.conectarControladorBuscar(ctlArticulo);
-		Articulo myArticulo1=ctlArticulo.buscarArticulo(view);
+		boolean resultado2=ctlArticulo.buscarArticulo(view);
 		
 		//JOptionPane.showMessageDialog(view, myArticulo1);
 		//se comprueba si le regreso un articulo valido
-		if(myArticulo1!=null && myArticulo1.getId()!=-1){
-			
+		if(resultado2){
+			Articulo myArticulo1=ctlArticulo.getArticulo();
 			//Se establece el departamento seleccionado
 			Departamento depart= (Departamento) this.view.getCbxDepatOrigen().getSelectedItem();
 			//se comprueba que exista el producto en el inventario

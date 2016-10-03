@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
@@ -20,6 +22,7 @@ public class CtlCliente implements ActionListener,WindowListener {
 	private Cliente myCliente=null;
 	private ClienteDao myClienteDao=null;
 	private boolean resultaOperacion=false;
+	private static final Pattern numberPattern=Pattern.compile("-?\\d+");
 	
 	public CtlCliente(ViewCrearCliente v,Conexion conn){
 		view=v;
@@ -38,6 +41,16 @@ public class CtlCliente implements ActionListener,WindowListener {
 		myCliente.setTelefono(view.getTxtTelefono().getText());
 		myCliente.setCelular(view.getTxtMovil().getText());
 		myCliente.setRtn(view.getTxtRtn().getText());
+		
+		String stLimiteCredito=view.getTxtLimitecredito().getText();
+		if(this.isNumber(stLimiteCredito)){
+			myCliente.setLimiteCredito(new BigDecimal(stLimiteCredito));
+		}else{
+			myCliente.setLimiteCredito(new BigDecimal(0));
+		}
+	}
+	private static boolean isNumber(String string){
+		return string !=null && numberPattern.matcher(string).matches();
 	}
 	
 	public boolean agregarCliente(){
@@ -62,7 +75,7 @@ public class CtlCliente implements ActionListener,WindowListener {
 			getCliente();
 			//se ejecuta la accion de guardar
 			if(myClienteDao.registrarCliente(myCliente)){
-				JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
 				myCliente.setId(myClienteDao.getIdClienteRegistrado());//se completa el proveedor guardado con el ID asignado por la BD
 				resultaOperacion=true;
 				this.view.setVisible(false);
@@ -91,7 +104,7 @@ public class CtlCliente implements ActionListener,WindowListener {
 		//se carga la configuracionde la view articulo para la actulizacion
 		this.view.configActualizar();
 		
-		
+		view.getTxtCodigo().setText(cliente.getId()+"");
 		//se establece el nombre de articulo en la view
 		this.view.getTxtNombre().setText(cliente.getNombre());
 		
@@ -101,6 +114,7 @@ public class CtlCliente implements ActionListener,WindowListener {
 		this.view.getTxtTelefono().setText(cliente.getTelefono());
 		this.view.getTxtMovil().setText(cliente.getCelular());
 		this.view.getTxtRtn().setText(cliente.getRtn());
+		this.view.getTxtLimitecredito().setText(cliente.getLimiteCredito().toString());
 		
 		
 		

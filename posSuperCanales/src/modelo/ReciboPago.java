@@ -7,6 +7,8 @@ import java.util.List;
 public class ReciboPago {
 	
 	private BigDecimal total=new BigDecimal(0.0);
+	private BigDecimal saldo=new BigDecimal(0.0);
+	private BigDecimal saldoAnterior=new BigDecimal(0.0);
 	private Cliente myCliente=null;
 	private String concepto="";
 	private String totalLetras="";
@@ -63,9 +65,28 @@ public class ReciboPago {
 		return total;
 	}
 	
+	public void setSaldo(BigDecimal t){
+		saldo=saldo.add(t);
+	}
+	public BigDecimal getSaldo(){
+		return saldo;
+	}
+	public void setSaldoAnterior(BigDecimal t){
+		saldoAnterior=saldoAnterior.add(t);
+	}
+	public BigDecimal getSaldoAnterior(){
+		return saldoAnterior;
+	}
+	
 	public void resetTotales(){
 		
 		total=BigDecimal.ZERO;
+		saldo=BigDecimal.ZERO;
+		saldoAnterior=BigDecimal.ZERO;
+	}
+	public void setSaldos0(){
+		saldo=BigDecimal.ZERO;
+		saldoAnterior=BigDecimal.ZERO;
 	}
 
 }
